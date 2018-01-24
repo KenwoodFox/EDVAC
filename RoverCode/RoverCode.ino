@@ -1,5 +1,5 @@
 //#include <VarSpeedServo.h>
-#include <Servo.h>
+//#include <Servo.h>
 
 char imput;
 boolean newData = false;
@@ -51,7 +51,7 @@ void index() {
 
 //End Index
     newData = false;
-    if ((imput != 'a') || (imput != 'h') || (imput != 's')) {
+    if ((imput == 'a') || (imput == 'h') || (imput == 's')) {
       delay(2);
     }else{
       Serial.println("That is not a command or it has not been added to my index yet.");
@@ -84,4 +84,6 @@ void rStatus() {
   //Gets the robot health/status
   Serial.println("Seems good to me pal");
   Serial.println("-----------------------------------------------------------------------");
+  Serial.write(27);   //Print "esc"
+  Serial.print("[2J");
 }
