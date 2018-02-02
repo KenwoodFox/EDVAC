@@ -32,20 +32,17 @@ void index() {
     Serial.println("-----------------------------------------------------------------------");
 //Command Index here
     if(imput == 'a') {
-
-      Serial.println("Starting program 'a'");
+      Serial.println("Exc program 'a'");
       comA();
     }
 
     if(imput == 'h') {
-
-      Serial.println("Starting program help");
+      Serial.println("Opening Help");
       help();
     }
 
     if(imput == 's') {
-
-      Serial.println("Starting program status");
+      Serial.println("Opening Status");
       rStatus();
     }
 
@@ -68,7 +65,7 @@ void comA() {
 }
 
 void help() {
-  //Runs when you send command B
+  //Runs when you send command H
   Serial.println("Command 'a': Does nothing.");
   delay(del);
   Serial.println("Command 'h': Shows this list of commands.");

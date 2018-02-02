@@ -1,19 +1,38 @@
-int potX = 0;
-int potY = 1;
-int x = 0;
-int y = 0;
+char imput;
+boolean PCData = false;
+boolean RoverData = false;
+int headLampState = 2;
 
 void setup() {
   Serial.begin(57600);
   Serial.println("Code Stared sucsesfully");
+  Serial1.begin(57600);
+  pinMode(pushButton, INPUT);
 }
 
 void loop() {
-  //Read Values
-  x = analogRead(potX);
-  y = analogRead(potY);
-  Serial.print(x);
-  Serial.print(" ");
-  Serial.println(y);
-  delay(10);
+  bypass();
+  button();
 }
+
+void bypas(){
+ if (Serial.available()) {
+    int inByte = Serial.read();
+    Serial1.print(inByte);
+
+  }
+  // read from port 1, send to port 0:
+  if (Serial1.available()) {
+    int inByte = Serial1.read();
+    Serial.print(inByte);
+  }
+}
+
+void button(){
+  int headLampState = digitalRead(pushButton);
+  if (headLampState == 1){
+    Serial1.print('h');
+  }
+  delay(1);
+}
+
