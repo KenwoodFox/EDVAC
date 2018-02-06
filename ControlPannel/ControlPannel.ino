@@ -2,6 +2,7 @@ char imput;
 boolean PCData = false;
 boolean RoverData = false;
 int headLampState = 2;
+int pushButton;
 
 void setup() {
   Serial.begin(57600);
@@ -15,7 +16,7 @@ void loop() {
   button();
 }
 
-void bypas(){
+void bypass(){
  if (Serial.available()) {
     int inByte = Serial.read();
     Serial1.print(inByte);

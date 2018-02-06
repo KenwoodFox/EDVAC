@@ -27,6 +27,8 @@ void command() {
 
 void index() {
   if (newData == true) {
+    Serial.println('*');
+    delay(100);
     Serial.print("Received Command: ");
     Serial.println(imput);
     Serial.println("-----------------------------------------------------------------------");
@@ -81,6 +83,6 @@ void rStatus() {
   //Gets the robot health/status
   Serial.println("Seems good to me pal");
   Serial.println("-----------------------------------------------------------------------");
-  Serial.write(27);   //Print "esc"
-  Serial.print("[2J");
+  //Serial.write(27);   //Print "esc"
+  //Serial.print("[2J");
 }
