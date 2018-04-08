@@ -1,10 +1,15 @@
 //#include <VarSpeedServo.h>
 //#include <Servo.h>
+#include <dht.h>
 
 char imput;
 boolean newData = false;
 
+dht DHT;
+#define DHT11_PIN 7 //Change this to the pin you want to use for the sensor
+
 int del = 5; //Serial delay command
+int notify = 100; //The number of un-notified checks between error prints
 
 void setup() {
   Serial.begin(57600);
@@ -15,7 +20,8 @@ void setup() {
 
 void loop() {
   command(); //Takes a command and stores it // please update for multi char!!
-  index(); //Index data in the store to a command// 
+  index(); //Index data in the store to a command
+  check(); //Check automatic functions of the robot
 }
 
 void command() {
@@ -27,7 +33,7 @@ void command() {
 
 void index() {
   if (newData == true) {
-    Serial.println('*');
+    Serial.println('*'); //replace me with a color code!
     delay(100);
     Serial.print("Received Command: ");
     Serial.println(imput);
@@ -47,13 +53,39 @@ void index() {
       Serial.println("Opening Status");
       rStatus();
     }
+    if(imput == 'm') {
+      Serial.println("Exc program 'Move'");
+      rMove();
+    }
 
 //End Index
     newData = false;
-    if ((imput == 'a') || (imput == 'h') || (imput == 's')) {
+    if ((imput == 'a') || (imput == 'h') || (imput == 's') || (imput == 'm')) {
       delay(2);
     }else{
       Serial.println("That is not a command or it has not been added to my index yet.");
+    }
+  }
+}
+
+void check(){
+  notify--;
+  int temp = digitalRead(2);
+  if(temp >= 0/*replace me with a value!*/){
+    if(notify >1){
+      int chk = DHT.read11(DHT11_PIN);
+      Serial.print(/*replace me with a color!*/ "Warning! Tempature is low: ");
+      Serial.println(DHT.temperature);
+    }
+  }
+
+
+  
+  int val = digitalRead(1);
+  if(val != 0){
+    if(notify >1){
+      Serial.println("The formost limit switch has been depressed, check the orentation of the robot");
+      notify == 100;
     }
   }
 }
@@ -64,6 +96,21 @@ void comA() {
   //Runs when you send command A
   Serial.println("Robot has done nothing.");
   Serial.println("-----------------------------------------------------------------------");
+}
+
+void rMove(){
+  int val = 0;
+  
+  Serial.println("The machine is preforming the action...");
+  //code to run a contiuious roll servo for 10 rotations
+
+  val = digitalRead(1); //pin for limit switch
+  if(val = 0){
+    Serial.println("The operation has been completed with no errors");
+  }else{
+    Serial.print("The Robot has encountered an error: ");
+    Serial.println("The formost limit switch has been depressed, check the orentation of the robot");
+  }
 }
 
 void help() {
