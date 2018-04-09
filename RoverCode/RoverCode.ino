@@ -2,23 +2,21 @@
 #include <Servo.h>
 #include <dht.h>
 
-char imput;
-boolean newData = false;
-Servo roll;
-
-
-dht DHT;
+char imput; //This char will be populated with the current command
+boolean newData = false; //This will denote to the index function when to spend time checking the serial registry
+Servo roll; //Add the roll servo
+dht DHT; //IDK what this does
 #define DHT11_PIN 7 //Change this to the pin you want to use for the sensor
 
 int del = 5; //Serial delay command
 int notify = 100; //The number of un-notified checks between error prints
 
 void setup() {
-  Serial.begin(57600);
-  Serial.println("You've been save");
-  delay(del);
-  help();
-  roll.attach(9);
+  Serial.begin(57600); //The only baud rate to work on the radios
+  Serial.println("You've been save"); //Travis is a good boy
+  delay(4000); //Wait for the radios to link
+  help(); //Display the help page
+  roll.attach(9); //Attach the roll servo to pin
 }
 
 void loop() {
@@ -28,7 +26,7 @@ void loop() {
 }
 
 void command() {
-  if (Serial.available() > 0) {
+  if (Serial.available() > 0) { //If a new command comes in, convert it into the imput variable and index it before overwriting it
     imput = Serial.read();
     newData = true;
   }
@@ -62,8 +60,8 @@ void index() {
     }
 
 //End Index
-    newData = false;
-    if ((imput == 'a') || (imput == 'h') || (imput == 's') || (imput == 'm')) {
+    newData = false; //Set the data in the index char to be overwrittin
+    if ((imput == 'a') || (imput == 'h') || (imput == 's') || (imput == 'm')) { //Secondary index to display the error message below
       delay(2);
     }else{
       Serial.println("That is not a command or it has not been added to my index yet.");
@@ -72,6 +70,10 @@ void index() {
 }
 
 void check(){
+  /* This command works by taking inventory of all the automated checks
+   * When not called by a command, this function will wait a numbr of
+   * cycles before activating and printing its warnings, or lacktherepf
+   */
   notify--;
   int temp = digitalRead(2);
   if(temp >= 0/*replace me with a value!*/){
@@ -82,8 +84,6 @@ void check(){
     }
   }
 
-
-  
   int val = digitalRead(1);
   if(val != 0){
     if(notify >1){
@@ -125,6 +125,8 @@ void help() {
   Serial.println("Command 'h': Shows this list of commands.");
   delay(del);
   Serial.println("Command 's': Checks the Status of the robot.");
+  delay(del);
+  Serial.println("Command 'r': Rotates the assembly, you will be prompted for a degree of motion");
   delay(del);
   Serial.println("-JPS");
   Serial.println("-----------------------------------------------------------------------");
