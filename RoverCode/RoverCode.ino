@@ -9,7 +9,7 @@ dht DHT; //IDK what this does
 #define DHT11_PIN 7 //Change this to the pin you want to use for the sensor
 
 int del = 5; //Serial delay command
-int notify = 100; //The number of un-notified checks between error prints
+int notify = 500; //The number of un-notified checks between error prints
 
 void setup() {
   Serial.begin(57600); //The only baud rate to work on the radios
@@ -22,7 +22,7 @@ void setup() {
 void loop() {
   command(); //Takes a command and stores it // please update for multi char!!
   index(); //Index data in the store to a command
-  check(); //Check automatic functions of the robot
+  //check(); //Check automatic functions of the robot
 }
 
 void command() {
@@ -54,14 +54,14 @@ void index() {
       Serial.println("Opening Status");
       rStatus();
     }
-    if(imput == 'm') {
+    if(imput == 'r') {
       Serial.println("Exc program 'Turn'");
       rMove();
     }
 
 //End Index
     newData = false; //Set the data in the index char to be overwrittin
-    if ((imput == 'a') || (imput == 'h') || (imput == 's') || (imput == 'm')) { //Secondary index to display the error message below
+    if ((imput == 'a') || (imput == 'h') || (imput == 's') || (imput == 'r')) { //Secondary index to display the error message below
       delay(2);
     }else{
       Serial.println("That is not a command or it has not been added to my index yet.");
@@ -75,21 +75,19 @@ void check(){
    * cycles before activating and printing its warnings, or lacktherepf
    */
   notify--;
-  int temp = digitalRead(2);
-  if(temp >= 0/*replace me with a value!*/){
-    if(notify >1){
+  while(notify <= 0 ){
+    int temp = digitalRead(2);
+    if(temp >= 0/*replace me with a value!*/){
       int chk = DHT.read11(DHT11_PIN);
       Serial.print(/*replace me with a color!*/ "Warning! Tempature is low: ");
       Serial.println(DHT.temperature);
     }
-  }
 
-  int val = digitalRead(1);
-  if(val != 0){
-    if(notify >1){
-      Serial.println("The formost limit switch has been depressed, check the orentation of the robot");
-      notify == 100;
+    int val = digitalRead(1);
+    if(val != 0){
+    Serial.println("The formost limit switch has been depressed, check the orentation of the robot");
     }
+    notify == 100;
   }
 }
 
@@ -104,13 +102,19 @@ void comA() {
 void rMove(){
   int val = 0;
   int serv = 0;
-  
+
   Serial.println("Imput Degree (0-9)");
+  while(Serial.available() <= 0){
+    delay (10);
+  }
+  serv = Serial.read();
   roll.write(serv * 20);
+  Serial.print("Received value: ");
+  Serial.println(serv);
   //code to run a contiuious roll servo for 10 rotations
 
   val = digitalRead(1); //pin for limit switch
-  if(val = 0){
+  if(val = 1){
     Serial.println("The operation has been completed with no errors");
   }else{
     Serial.print("The Robot has encountered an error: ");
