@@ -1,9 +1,11 @@
 //#include <VarSpeedServo.h>
-//#include <Servo.h>
+#include <Servo.h>
 #include <dht.h>
 
 char imput;
 boolean newData = false;
+Servo roll;
+
 
 dht DHT;
 #define DHT11_PIN 7 //Change this to the pin you want to use for the sensor
@@ -16,6 +18,7 @@ void setup() {
   Serial.println("You've been save");
   delay(del);
   help();
+  roll.attach(9);
 }
 
 void loop() {
@@ -54,7 +57,7 @@ void index() {
       rStatus();
     }
     if(imput == 'm') {
-      Serial.println("Exc program 'Move'");
+      Serial.println("Exc program 'Turn'");
       rMove();
     }
 
@@ -100,8 +103,10 @@ void comA() {
 
 void rMove(){
   int val = 0;
+  int serv = 0;
   
-  Serial.println("The machine is preforming the action...");
+  Serial.println("Imput Degree (0-9)");
+  roll.write(serv * 20);
   //code to run a contiuious roll servo for 10 rotations
 
   val = digitalRead(1); //pin for limit switch
@@ -128,8 +133,6 @@ void help() {
 void rStatus() {
   //Runs when you send command s
   //Gets the robot health/status
-  Serial.println("Seems good to me pal");
-  Serial.println("-----------------------------------------------------------------------");
-  //Serial.write(27);   //Print "esc"
-  //Serial.print("[2J");
+  notify = 0;
+  check();
 }
