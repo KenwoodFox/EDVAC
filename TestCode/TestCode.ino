@@ -1,42 +1,33 @@
+#include <dht.h>
 #include <Servo.h>
 
-Servo myServo;
+dht DHT;
+char imput;
+Servo servo;
+int pos = 0;
 
-char receivedChar;
-boolean newData = false;
+#define DHT11_PIN 22
 
-void setup() {
- Serial.begin(57600);
- Serial.println("<Arduino is ready>");
-
- myServo.attach(9);
+void setup(){
+  Serial.begin(57600);
+  servo.attach(12);
 }
 
-void loop() {
- recvOneChar();
- showNewData();
-}
+void loop(){
+  int chk = DHT.read11(DHT11_PIN);
+  Serial.print("Temperature = ");
+  Serial.println(DHT.temperature);
+  Serial.print("Humidity = ");
+  Serial.println(DHT.humidity);
+  delay(2000);
 
-void recvOneChar() {
- if (Serial.available() > 0) {
- receivedChar = Serial.read();
- newData = true;
- }
+  for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    servo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(150);                       // waits 15ms for the servo to reach the position
+  }
+  for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+    servo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(150);                       // waits 15ms for the servo to reach the position
+  }
 }
-
-void showNewData() {
- if (newData == true) {
- Serial.print("Runing command: ");
- Serial.println(receivedChar);
- if(receivedChar == 'a') {
-  myServo.write(0);
-  Serial.println("Moving myServo to 0");
- }
- if(receivedChar == 'b') {
-  myServo.write(180);
-  Serial.println("Moving myServo to 180");
- }
- newData = false;
- }
-}
-

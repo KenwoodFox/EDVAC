@@ -4,7 +4,7 @@
 
 char imput; //This char will be populated with the current command
 boolean newData = false; //This will denote to the index function when to spend time checking the serial registry
-Servo roll; //Add the roll servo
+Servo servo; //Add the roll servo
 dht DHT; //IDK what this does
 #define DHT11_PIN 7 //Change this to the pin you want to use for the sensor
 
@@ -16,7 +16,7 @@ void setup() {
   Serial.println("You've been save"); //Travis is a good boy
   delay(4000); //Wait for the radios to link
   help(); //Display the help page
-  roll.attach(9); //Attach the roll servo to pin
+  servo.attach(12); //Attach the roll servo to pin
 }
 
 void loop() {
@@ -108,9 +108,9 @@ void rMove(){
     delay (10);
   }
   serv = Serial.read();
-  roll.write(serv * 20);
   Serial.print("Received value: ");
   Serial.println(serv);
+  servo.write(serv);
   //code to run a contiuious roll servo for 10 rotations
 
   val = digitalRead(1); //pin for limit switch
