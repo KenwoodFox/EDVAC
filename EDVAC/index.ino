@@ -10,7 +10,23 @@ void index()
   if (imput == "example")
   {
     Serial.println("exc operation example");
-    operation_lift(0);
+    operation_example();
+    
+    if (EXAMPLECOMPLETE == true)
+    {
+      Serial.println("Operation complete");
+    }
+    else
+    {
+      Serial.println("Operation not completed!");
+    }
+    EXAMPLECOMPLETE = false;
+  }
+
+  if (imput == "light")
+  {
+    Serial.println("Entering Light Operation Menu");
+    operation_light();
     
     if (EXAMPLECOMPLETE == true)
     {
