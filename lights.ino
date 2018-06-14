@@ -1,10 +1,10 @@
 void operation_light()
 {
   Serial.println("To Toggle Light States, imput a number between 0 and 10...");
-    while(newData = false && commandTimeout >= 0)
+    while(newData == false && commandTimeout >= 0)
     {
       //do nothing
-      delay(5);
+      delay(200);
       commandTimeout--;
     }
 
@@ -42,5 +42,6 @@ void operation_light()
     delay(10);
     imput = "";
     state = LOW;
+    commandTimeout = 40;
     Serial.println("Menu Closing");
 }

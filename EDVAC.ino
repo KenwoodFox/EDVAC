@@ -12,7 +12,7 @@ boolean EXAMPLECOMPLETE = false;
 int i = 0; //generic integer to run while loops
 int state = LOW;
 int imputACT = "";
-int commandTimeout = 400; //The interger to determine if a command has timed out or not (so as to not get stuck in a loop)
+int commandTimeout = 40; //The interger to determine if a command has timed out or not (so as to not get stuck in a loop)
 boolean newData = false; //becomes true only as long as there is unindexed information
 String imput = ""; //populated with the current command not yet run
 //End other variables

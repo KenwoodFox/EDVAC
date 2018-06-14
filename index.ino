@@ -40,7 +40,7 @@ void index()
   }
 
   //End Index
-    if ((imput == "example") || (imput == "example2"))
+    if ((imput == "light") || (imput == "example"))
     { //Secondary index to display the error message below
       delay(2);
     }
